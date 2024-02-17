@@ -22,3 +22,9 @@
 #container a {
   text-decoration: none;
 }
+.qr-code {
+  height: 30em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
