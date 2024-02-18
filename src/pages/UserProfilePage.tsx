@@ -14,6 +14,7 @@ const UserProfilePage: React.FC = () => {
     const [signedCoupon, setSignedCoupon] = useState("");
     const pageName = "My profile";
 
+
     return (
         <IonPage>
             <IonHeader>
