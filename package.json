@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "loyalty-customer-mobile-app/node_modules/.bin/vite",
-    "build": "loyalty-customer-mobile-app/node_modules/.bin/tsc && vite build",
+    "dev": "vite",
+    "build": "tsc && vite build",
     "preview": "loyalty-customer-mobile-app/node_modules/.bin/vite preview",
     "test.e2e": "loyalty-customer-mobile-app/node_modules/.bin/cypress run",
     "test.unit": "loyalty-customer-mobile-app/node_modules/.bin/vitest",
