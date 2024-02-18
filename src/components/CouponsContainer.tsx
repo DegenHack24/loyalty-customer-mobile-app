@@ -34,14 +34,12 @@ const CouponsContainer: React.FC<ContainerProps> = ({
 }) => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [error, setError] = useState<string | null>(null);
-  console.log(coupons, "coupons");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getCoupons(); // Fetch data from the API using getCoupons function
         setCoupons(data.activeCoupons); // Set the fetched data to the state
-        console.log(data.activeCoupons, "data");
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Error fetching data. Please try again.");
