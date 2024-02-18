@@ -14,6 +14,7 @@ import {
 } from "@ionic/react";
 import { signCoupon } from "../helpers/signCoupon";
 import { createCouponQRMessage } from "../helpers/createCouponMessage";
+import { getCoupons } from "../services/loyaltyService";
 
 interface ContainerProps {
   setIsOpen: (state: boolean) => void;
@@ -21,7 +22,7 @@ interface ContainerProps {
 }
 
 interface Coupon {
-  couponId: number;
+  couponCode: number;
   name: string;
   image: string;
   description: string;
@@ -33,48 +34,30 @@ const CouponsContainer: React.FC<ContainerProps> = ({
 }) => {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [error, setError] = useState<string | null>(null);
+  console.log(coupons, "coupons");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setCoupons([
-          {
-            couponId: 1,
-            name: "Koszulka adidas domowa",
-            image:
-              "https://sklep.legia.com/wp-content/uploads/2023/01/1K2022_Sklep_1-min.png",
-            description: "Znika dla udziałowców",
-          },
-          {
-            couponId: 2,
-            name: "Bordowa bluza Fundacja Legii",
-            image:
-              "https://sklep.legia.com/wp-content/uploads/2024/02/kwadrat3-scaled.jpg",
-            description: "Znika dla udziałowców",
-          },
-          {
-            couponId: 3,
-            name: "Legia Warszawa vs. Puszcza Niepołomice",
-            image:
-              "https://robostaticcontent.s3.amazonaws.com/Content/Legia/Images/Ticket_srennab/3530_medium_pl-PL?nocache=8b20fdf469d841ee8c295c346d740b01",
-            description: "Znika dla udziałowców",
-          },
-        ]);
+        const data = await getCoupons(); // Fetch data from the API using getCoupons function
+        setCoupons(data.activeCoupons); // Set the fetched data to the state
+        console.log(data.activeCoupons, "data");
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("Error fetching data. Please try again."); // You might want to handle the error more gracefully
+        setError("Error fetching data. Please try again.");
       }
     };
 
     fetchData();
   }, []);
+
   return (
     <IonCard>
       <IonCardContent>
         <IonList>
-          {coupons.map((coupon, index) => {
-            return (
-              <IonItem>
+          {coupons.length > 0 &&
+            coupons.map((coupon, index) => (
+              <IonItem key={coupon.couponCode}>
                 <IonThumbnail slot="start">
                   <img alt="Silhouette of mountains" src={coupon.image} />
                 </IonThumbnail>
@@ -83,11 +66,11 @@ const CouponsContainer: React.FC<ContainerProps> = ({
                   fill="clear"
                   onClick={() => {
                     setIsOpen(true);
-                    signCoupon(`${coupon.couponId}`).then((value) => {
+                    signCoupon(`${coupon.couponCode}`).then((value) => {
                       setQRCodeMessage(
                         createCouponQRMessage(
-                          coupon.couponId,
-                          `${coupon.couponId}`,
+                          coupon.couponCode,
+                          `${coupon.couponCode}`,
                           value
                         )
                       );
@@ -97,8 +80,7 @@ const CouponsContainer: React.FC<ContainerProps> = ({
                   Redeem
                 </IonButton>
               </IonItem>
-            );
-          })}
+            ))}
         </IonList>
       </IonCardContent>
     </IonCard>
